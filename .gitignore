@@ -1,0 +1,5 @@
+node_modules
+data-backup/
+assets/islands/
+.env
+.discloud.config
