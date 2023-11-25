@@ -49,6 +49,10 @@ module.exports = {
             : config.default_messages.welcome.welcome_2[0];
 
         const welcomeMessage = `${bold(message1)} ${emoji}\n<@${member.user.id}> ${message2}.`;
-        channel.send(welcomeMessage);
+        try {
+            await channel.send(welcomeMessage);
+        } catch (err) {
+            console.error('Bot doesn\'t have permission to send messages in this channel:', err);
+        }
     }
 }

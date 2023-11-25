@@ -49,14 +49,18 @@ module.exports = {
             guildData.channels[selectedChannel] = channelId;
         };
 
-        await createCommonChannel('welcome', defaultChannels.welcome, 0, [
-            { id: guild.roles.everyone, deny: [PermissionsBitField.Flags.SendMessages] },
-            { id: (await guild.members.fetch(guild.client.user.id)).user.id, allow: [PermissionsBitField.Flags.SendMessages] },
-        ]);
+        try {
+            await createCommonChannel('welcome', defaultChannels.welcome, 0, [
+                { id: guild.roles.everyone, deny: [PermissionsBitField.Flags.SendMessages] },
+                { id: (await guild.members.fetch(guild.client.user.id)).user.id, allow: [PermissionsBitField.Flags.SendMessages] },
+            ]);
 
-        await createCommonChannel('autorole', defaultChannels.autorole, 10, [
-            { id: guild.roles.everyone, deny: [PermissionsBitField.Flags.AddReactions, PermissionsBitField.Flags.UseApplicationCommands] },
-        ]);
+            await createCommonChannel('autorole', defaultChannels.autorole, 10, [
+                { id: guild.roles.everyone, deny: [PermissionsBitField.Flags.AddReactions, PermissionsBitField.Flags.UseApplicationCommands] },
+            ]);
+        } catch (err) {
+            console.error('Bot doesn\'t have permission to create channels:', err);
+        }
 
         guildsData.push(guildData);
         saveGuildsData();
