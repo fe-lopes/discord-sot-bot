@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
+const { spawn } = require('child_process');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 
 const client = new Client({
@@ -43,5 +44,18 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+const deployCommands = spawn('node', ['deploy-commands.js']);
+deployCommands.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+deployCommands.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+deployCommands.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+});
 
 client.login(process.env.BOT_TOKEN);

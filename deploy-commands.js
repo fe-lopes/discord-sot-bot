@@ -32,7 +32,7 @@ const rest = new REST().setToken(process.env.DISCORD_TOKEN);
 		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-	} catch (error) {
-		console.error(error);
+	} catch (err) {
+		console.error(err);
 	}
 })();

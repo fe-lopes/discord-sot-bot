@@ -10,12 +10,13 @@ Este projeto contém o código-fonte do bot Papagaio Pirata (sot-parrot) para Di
 
 Comandos de barra (/)
 
-- `/ban`
-- `/kick`
 - `/d20`
 - `/island`
+- `/time`
 - `/user`
 - `/server`
+- `/ban`
+- `/kick`
 
 Comandos de barra (/) de configuração
 
