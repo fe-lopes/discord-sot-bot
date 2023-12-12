@@ -1,5 +1,6 @@
 node_modules
 data-backup/
 assets/islands/
+guilds-data.json
+discloud.config
 .env
-.discloud.config

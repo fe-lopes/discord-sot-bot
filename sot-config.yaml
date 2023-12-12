@@ -1,0 +1,121 @@
+guild_caps:
+  members: 24
+  ships: 360
+guild_colors:
+  - 0x019810
+  - 0xa8a27a
+  - 0x06c29f
+  - 0xb42257
+  - 0xdcd62e
+  - 0xcc3f29
+  - 0x2493b6
+  - 0x7a48b8
+alignment_colors:
+  the_emissary: 0xf8e0c6
+  the_feared: 0x9b3838
+  the_gold_seeker: 0xd8ab3a
+  the_guardian: 0x56d08b
+  the_hunter: 0x71412b
+  "the_ill-fated": 0x645084
+  the_rogue: 0xd88c3e
+  the_servant: 0xbe4e3a
+  the_voyager: 0x8ec8eb
+request_urls:
+  guild_summary: "https://www.seaofthieves.com/{lang}/api/profilev2/guilds-summary"
+  guild_members: "https://www.seaofthieves.com/api/profilev2/guild-members"
+  guild_ships: "https://www.seaofthieves.com/api/profilev2/guild-ships"
+img_urls:
+  ship_alignment: "https://www.seaofthieves.com/assets/profilev2/captaincy/alignment-bgs/"
+  guild_icons:
+    - "https://i.imgur.com/hIVGtK1.png"
+    - "https://i.imgur.com/X1x4aHA.png"
+    - "https://i.imgur.com/doNuIof.png"
+    - "https://i.imgur.com/4ec7m39.png"
+    - "https://i.imgur.com/KxEcU27.png"
+    - "https://i.imgur.com/M4ykooR.png"
+    - "https://i.imgur.com/lXUCZWU.png"
+    - "https://i.imgur.com/3K3vWaM.png"
+    - "https://i.imgur.com/PcKPz7i.png"
+    - "https://i.imgur.com/Je9423A.png"
+    - "https://i.imgur.com/6FNMVGZ.png"
+    - "https://i.imgur.com/NniZmfh.png"
+    - "https://i.imgur.com/jtMs5kz.png"
+    - "https://i.imgur.com/APaLbp7.png"
+    - "https://i.imgur.com/qlytztC.png"
+    - "https://i.imgur.com/ax6sQUb.png"
+    - "https://i.imgur.com/nXopPxR.png"
+    - "https://i.imgur.com/eCDbYQu.png"
+    - "https://i.imgur.com/YGwHNjR.png"
+    - "https://i.imgur.com/lJjULVx.png"
+    - "https://i.imgur.com/rIq9D3E.png"
+    - "https://i.imgur.com/1S8oyOh.png"
+    - "https://i.imgur.com/YxURYuu.png"
+    - "https://i.imgur.com/E5WuXdu.png"
+    - "https://i.imgur.com/Tnsj5hi.png"
+    - "https://i.imgur.com/8g8ltM6.png"
+    - "https://i.imgur.com/6aKaQ8r.png"
+    - "https://i.imgur.com/mG1N47o.png"
+    - "https://i.imgur.com/w6wsHCQ.png"
+    - "https://i.imgur.com/WpccSw6.png"
+    - "https://i.imgur.com/q75j79u.png"
+    - "https://i.imgur.com/9kQRMfB.png"
+    - "https://i.imgur.com/KvIhQyd.png"
+    - "https://i.imgur.com/UqstcNL.png"
+    - "https://i.imgur.com/EovlSx9.png"
+    - "https://i.imgur.com/gIzWe62.png"
+    - "https://i.imgur.com/nGZ7To9.png"
+    - "https://i.imgur.com/X9widaY.png"
+    - "https://i.imgur.com/p84Kfqs.png"
+headers:
+    accept_language: "en;q=0.9,pt-BR;q=0.8,pt;q=0.7,es;q=0.6"
+    referer: "https://www.seaofthieves.com/profile/guilds/"
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.61"
+localization:
+  guild_roles:
+    owner:
+      es_ES: "propietario"
+      pt_BR: "proprietário"
+    leader:
+      es_ES: "líder"
+      pt_BR: "líder"
+    mate:
+      es_ES: "compañero"
+      pt_BR: "companheiro"
+  ships:
+    sloop:
+      es_ES: "balandro"
+      pt_BR: "chalupa"
+    brigantine:
+      es_ES: "bergantín"
+      pt_BR: "bergantim"
+    galleon:
+      es_ES: "galeón"
+      pt_BR: "galeão"
+  alignments:
+    the_emissary:
+      es_ES: "el_emisario"
+      pt_BR: "o_emissário"
+    the_feared:
+      es_ES: "el-temible"
+      pt_BR: "o_temido"
+    the_gold_seeker:
+      es_ES: "el_buscador_de_oro"
+      pt_BR: "o_buscador_de_ouro"
+    the_guardian:
+      es_ES: "el_guardián"
+      pt_BR: "o_guardião"
+    the_hunter:
+      es_ES: "el_cazador"
+      pt_BR: "o_caçador"
+    "the_ill-fated":
+      es_ES: "el_gafe"
+      pt_BR: "o_desaventurado"
+    the_rogue:
+      es_ES: "el_pícaro"
+      pt_BR: "o_rebelde"
+    the_servant:
+      es_ES: "el_siervo"
+      pt_BR: "o_servo"
+    the_voyager:
+      es_ES: "el_viajero"
+      pt_BR: "o_viajante"
