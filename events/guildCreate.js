@@ -27,6 +27,7 @@ module.exports = {
                 },
             },
             roles: [],
+            sot_cookie: '',
             sot_guilds: [],
         };
 

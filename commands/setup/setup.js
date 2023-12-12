@@ -1,5 +1,6 @@
+const axios = require('axios');
 const fs = require('fs');
-const { SlashCommandBuilder, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, PermissionFlagsBits, bold, RoleSelectMenuBuilder } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, ActionRowBuilder, PermissionsBitField, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionFlagsBits, bold } = require('discord.js');
 const config = require('../../bot-config.json');
 const guildsData = require('../../guilds-data');
 
@@ -73,8 +74,25 @@ module.exports = {
                                 .addChoices(
                                     { name: 'adicionar', value: 'add' },
                                     { name: 'remover', value: 'remove' },
-                                    { name: 'listar', value: 'list' })))),
-
+                                    { name: 'listar', value: 'list' }))))
+        .addSubcommandGroup(subcommandGroup =>
+            subcommandGroup.setName('guilds')
+                .setDescription('Configura as guildas do Sea of Thieves do servidor')
+                .addSubcommand(subcommand =>
+                    subcommand.setName('manage')
+                        .setDescription('Adiciona, remove ou lista as guildas do servidor')
+                        .addStringOption(option =>
+                            option.setName('opção')
+                                .setDescription('Selecione uma das opções de configuração')
+                                .setRequired(true)
+                                .addChoices(
+                                    { name: 'adicionar', value: 'add' },
+                                    { name: 'remover', value: 'remove' },
+                                    { name: 'listar', value: 'list' },
+                                    { name: 'imagem', value: 'image' })))
+                .addSubcommand(subcommand =>
+                    subcommand.setName('cookie')
+                        .setDescription('Atualizar cookie'))),
     async execute(interaction) {
         const guildData = await guildsData.find(data => data.guild_id === interaction.guild.id);
 
@@ -110,7 +128,7 @@ module.exports = {
                         const newMessage = message.content;
                         guildData.messages.welcome.welcome_1.push(newMessage);
                         saveGuildsData();
-                        await interaction.editReply(`Aye aye! Uma nova mensagem primária **"${newMessage}"** foi atirada ao baú das saudações com grande sucesso!`);
+                        await interaction.editReply(`Aye-aye! Uma nova mensagem primária **"${newMessage}"** foi atirada ao baú das saudações com grande sucesso!`);
                         collector.stop();
                     });
 
@@ -147,7 +165,7 @@ module.exports = {
                         }
                     });
                 } else if (option === 'list') {
-                    response = bold('Aye aye! Aqui estão as mensagens primárias de boas-vindas:\n')
+                    response = bold('Aye-aye! Aqui estão as mensagens primárias de boas-vindas:\n')
                     response += await guildData.messages.welcome.welcome_1.length > 0
                         ? guildData.messages.welcome.welcome_1.join('\n')
                         : config.default_messages.welcome.welcome_1.join('\n')
@@ -358,13 +376,13 @@ module.exports = {
 
                     collector.on('end', (collected, reason) => {
                         if (reason === 'time') {
-                            interaction.editReply('**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!');
+                            interaction.editReply({content: '**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!', components: [], });
                         }
                     });
                 } else if (option === 'list') {
                     response = 'Ahoy, parece que não há nenhum cargo nos registros ainda. Que tal criar um agora mesmo?';
                     if (guildData.roles.length > 0) {
-                        response = bold('Aye aye! Aqui estão todos os cargos para atribuição automática:\n');
+                        response = bold('Aye-aye! Aqui estão todos os cargos para atribuição automática:\n');
                         guildData.roles.forEach(roleId => {
                             role = interaction.guild.roles.cache.get(roleId);
                             if (role) response += role.name.toLowerCase().replace(/ /g, '_') + '\n';
@@ -373,6 +391,163 @@ module.exports = {
 
                     uniqueResponse = true;
                 }
+            }
+        } else if (interaction.options.getSubcommandGroup() === 'guilds') {
+            const option = interaction.options.getString('opção');
+            if (interaction.options.getSubcommand() === 'manage') {
+                if (option === 'add') {
+                    await interaction.reply({ content: 'Digite o ID da guild a ser adicionada:', ephemeral: true });
+
+                    const filter = m => m.author.id === interaction.user.id;
+                    const collector = interaction.channel.createMessageCollector({ filter, time: 60_000, max: 1 });
+                    collector.on('collect', async (message) => {
+                        message.delete().catch(console.error);
+
+                        if (guildData.sot_cookie) {
+                            await interaction.editReply('Processando...');
+                            const guildId = message.content;
+                            try {
+                                let requestUrl = new URL(config.sot.urls.guild_summary);
+                                let referer = new URL(config.sot.headers.referer);
+                                referer.pathname += `/${guildId}`;
+                                const responseContent = await axios.get(requestUrl.toString(), {
+                                    headers: {
+                                        'accept-language': config.sot.headers.accept_language,
+                                        'referer': referer.toString(),
+                                        'user-agent': config.sot.headers.user_agent,
+                                        'cookie': guildData.sot_cookie,
+                                    },
+                                });
+
+                                const sotGuild = responseContent.data[0];
+                                const {
+                                    Branding: { GuildName }
+                                } = sotGuild;
+
+                                const newGuild = { id: guildId, name: GuildName, image: '', };
+                                guildData.sot_guilds.push(newGuild);
+                                saveGuildsData();
+                                reply = `Aye-aye! A guilda **${GuildName}** foi adicionada ao registro de guildas do servidor!`;
+                            } catch (err) {
+                                console.error('Error fetching SoT guild data:', err);
+                                reply = bold('Ahoy, parece que houve um erro ao buscar informações da guilda.\n');
+                                reply += 'Verifique se o cookie utilizado é válido ou tente novamente mais tarde.';
+                            }
+                        } else {
+                            reply = 'É necessário ter um cookie válido salvo primeiro, arr!';
+                        }
+                        await interaction.editReply(reply);
+                        collector.stop();
+                    });
+
+                    collector.on('end', (collected, reason) => {
+                        if (reason === 'time') {
+                            interaction.editReply('**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!');
+                        }
+                    });
+                } else if (option === 'list') {
+                    if (await guildData.sot_guilds.length > 0) {
+                        response = bold('Aye-aye! Aqui estão as guildas registradas do nosso servidor:\n')
+                        response += guildData.sot_guilds.map(guild => guild.name).join('\n');
+                        response += '\n\nSe o nome de alguma guilda estiver desatualizado, basta remover e adicioná-la novamente!';
+                    } else {
+                        response = 'Parece que ainda não há nenhuma guilda registrada neste servidor, capitão.';
+                    }
+                    uniqueResponse = true;
+                } else if (option === 'remove') {
+                    await interaction.reply({ content: 'Insira o ID da guilda que deseja remover:', ephemeral: true });
+
+                    const filter = m => m.author.id === interaction.user.id;
+                    const collector = interaction.channel.createMessageCollector({ filter, time: 60_000, max: 1 });
+                    collector.on('collect', async (message) => {
+                        message.delete().catch(console.error);
+
+                        const guildIndex = guildData.sot_guilds.findIndex((id) => id === message.content);
+                        if (guildIndex !== -1) {
+                            guildData.messages.sot_guilds.splice(guildIndex, 1);
+                            saveGuildsData();
+                            reply = 'Guilda removida dos registros, como uma pegada na areia que o mar leva embora.';
+                        } else {
+                            reply = bold('Argh! Essa guilda não foi avistada nos sete mares.\n');
+                            reply += 'Garanta que inseriu exatamente o ID da guilda que quer remover. Primeiro, liste as guildas para que possa copiar o ID da que deseja mandar para o baú de Davy Jones!';
+                        }
+
+                        await interaction.editReply(reply);
+                        collector.stop();
+                    });
+
+                    collector.on('end', (collected, reason) => {
+                        if (reason === 'time') {
+                            interaction.editReply('**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!');
+                        }
+                    });
+                } else if (option === 'image') {
+                    if (guildData.sot_guilds && guildData.sot_guilds.length > 0) {
+                        let guildsOptions = [];
+                        guildData.sot_guilds.forEach((guild, index) => {
+                            selectOption = new StringSelectMenuOptionBuilder().setLabel(guild.name).setValue(index.toString());
+                            guildsOptions.push(selectOption);
+                        });
+                        const select = new StringSelectMenuBuilder().setCustomId('guildSelectMenu').setPlaceholder('Guilda').addOptions(guildsOptions);
+                        const row = new ActionRowBuilder().addComponents(select);
+                        await interaction.reply({ content: 'Selecione uma guilda:', components: [row], ephemeral: true, });
+
+                        const filter = i => i.customId === 'guildSelectMenu' && i.user.id === interaction.user.id;
+                        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 60_000, max: 1 });
+                        collector.on('collect', async i => {
+                            const selectedGuildIndex = parseInt(i.values[0]);
+                            await interaction.editReply({ content: 'Insira a URL da imagem para a guilda:', components: [], });
+
+                            const filter = m => m.author.id === interaction.user.id;
+                            const collector = interaction.channel.createMessageCollector({ filter, time: 60_000, max: 1 });
+                            collector.on('collect', async message => {
+                                message.delete().catch(console.error);
+                                if (isValidUrl(message.content) && config.supported_images.includes(message.content.split('.').pop())) {
+                                    guildData.sot_guilds[selectedGuildIndex].image = message.content;
+                                    saveGuildsData();
+                                    reply = 'Aye-aye! Imagem da guilda atualizada com sucesso.';
+                                } else {
+                                    reply = '**Argh!** Essa URL me parece inválida.\n';
+                                    reply += 'Os formatos de imagem aceitos são: ' + config.supported_images.join(', ').toUpperCase() + '.';
+                                }
+                                await interaction.editReply(reply);
+                                collector.stop();
+                            });
+                            collector.on('end', (collected, reason) => {
+                                if (reason === 'time') {
+                                    interaction.editReply({ content: '**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!', components: [] });
+                                }
+                            });
+                        });
+                        collector.on('end', (collected, reason) => {
+                            if (reason === 'time') {
+                                interaction.editReply({ content: '**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!', components: [] });
+                            }
+                        });
+                    } else {
+                        await interaction.reply({ content: 'Ainda não há nenhuma guilda em nossos registros, capitão.', ephemeral: true });
+                    }
+                }
+            } else if (interaction.options.getSubcommand() === 'cookie') {
+                await interaction.reply({ content: 'Insira o novo cookie:', ephemeral: true });
+
+                const filter = m => m.author.id === interaction.user.id;
+                const collector = interaction.channel.createMessageCollector({ filter, time: 60_000, max: 1 });
+                collector.on('collect', async (message) => {
+                    message.delete().catch(console.error);
+                    guildData.sot_cookie = message.content;
+                    saveGuildsData();
+                    reply = 'Aye-aye, cookie atualizado!';
+
+                    await interaction.editReply(reply);
+                    collector.stop();
+                });
+
+                collector.on('end', (collected, reason) => {
+                    if (reason === 'time') {
+                        interaction.editReply('**Avast!** O tempo escoou como a areia numa ampulheta sob o olhar do velho Poseidon, missão abortada!');
+                    }
+                });
             }
         }
 
@@ -387,4 +562,13 @@ function saveGuildsData() {
             console.error('Error saving guilds-data.json:', err);
         }
     });
+}
+
+function isValidUrl(str) {
+    try {
+        new URL(str);
+        return true
+    } catch (err) {
+        return false
+    }
 }
