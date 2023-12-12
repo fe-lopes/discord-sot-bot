@@ -1,10 +1,4 @@
 {
-    "sot_links": {
-        "guild_base_url": "https://www.seaofthieves.com/pt-br/profile/guilds/",
-        "guild_summary":"https://www.seaofthieves.com/pt-br/api/profilev2/guilds-summary/",
-        "guild_members": "https://www.seaofthieves.com/pt-br/api/profilev2/guild-members?guild=",
-        "guild_ships": "https://www.seaofthieves.com/pt-br/api/profilev2/guild-ships?guild="
-    },
     "default_channels": {
         "welcome": "ahoy-bem-vindo",
         "autorole": "cargos-automáticos"
@@ -22,6 +16,9 @@
             ]
         }
     },
+    "supported_images": [
+        "jpg", "jpeg", "png", "gif"
+    ],
     "regions": [
         {"id": 0, "name": "No Man's Sea", "emoji": ""},
         {"id": 1, "name": "The Ancient Isles", "emoji": "area_Ancientisles"},

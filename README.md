@@ -17,6 +17,8 @@ Comandos de barra (/)
 - `/server`
 - `/ban`
 - `/kick`
+- `/guild`
+  - `overview`, `members`, `ships`
 
 Comandos de barra (/) de configuração
 
@@ -24,15 +26,19 @@ Comandos de barra (/) de configuração
   - `welcome`
     - `channel`
     - `primary-messages`
-      - `add`, `remove` e `list`.
+      - `add`, `remove`, `list`
     - `secondary-messages`
-      - `add`, `remove` e `list`.
+      - `add`, `remove`, `list`
     - `emojis`
-      - `add`, `remove` e `list`.
+      - `add`, `remove`, `list`
   - `auto-role`
     - `channel`
     - `roles`
-      - `add`, `remove` e `list`.
+      - `add`, `remove`, `list`
+  - `guilds`
+    - `manage`
+      - `add`, `remove`, `list`, `image`
+    - `update cookie`
 
 ---
 

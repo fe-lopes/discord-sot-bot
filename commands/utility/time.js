@@ -31,11 +31,11 @@ module.exports = {
         const dateTimeEmbed = new EmbedBuilder()
             .setColor(embedColor)
             .setTitle(`Dia **${gameTime.day}** às **${gameTime.hour}:${gameTime.minute}**`)
-            .setFooter({ text: 'Estoque dos postos marítimos mudam diariamente às 12:00' })
+            .setFooter({ text: 'Estoque dos postos marítimos mudam diariamente às 00:00' })
             .setThumbnail(imageUrl)
             .addFields(
-                { name: 'Nascer do sol', value: '6:00', inline: true },
-                { name: 'Pôr do sol', value: '20:00', inline: true },
+                { name: 'Nascer do sol', value: '5:00', inline: true },
+                { name: 'Pôr do sol', value: '22:00', inline: true },
             )
 
         await interaction.reply({ embeds: [dateTimeEmbed] });
