@@ -137,7 +137,7 @@ module.exports = {
                         .setFooter({ text: shipsAtSea });
 
                     await interaction.editReply({ content: '', embeds: [guildEmbed] });
-                } catch (err) {e3w4444444444444444444444444444
+                } catch (err) {
                     console.error(err);
                     await interaction.editReply('Arrr! Um erro surgiu ao buscar as informações da guilda, tente novamente mais tarde.');w3eeeeeeeeeeeeeeeeeeeeeeeee
                 }
