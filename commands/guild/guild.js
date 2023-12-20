@@ -129,7 +129,7 @@ module.exports = {
                         .setImage(selectedGuild.image)
                         .addFields(
                             { name: '\u200B', value: '\u200B' },
-                            { name: localization[locale].level, value: `${Level.toString()} (${xpPercentage}%)`, inline: false },
+                            { name: localization[locale].level, value: `${(Level % 100).toString()} (${xpPercentage}%)`, inline: false },
                             { name: localization[locale].distinction, value: DistinctionLevel.toString(), inline: true },
                             { name: localization[locale].members, value: `${NumberOfMembers.toString()}/${sotConfig.guild_caps.members}`, inline: true },
                             { name: localization[locale].ships, value: `${NumberOfShips.toString()}`, inline: true },
@@ -137,7 +137,7 @@ module.exports = {
                         .setFooter({ text: shipsAtSea });
 
                     await interaction.editReply({ content: '', embeds: [guildEmbed] });
-                } catch (err) {e3w4444444444444444444444444444
+                } catch (err) {
                     console.error(err);
                     await interaction.editReply('Arrr! Um erro surgiu ao buscar as informações da guilda, tente novamente mais tarde.');w3eeeeeeeeeeeeeeeeeeeeeeeee
                 }
